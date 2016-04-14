@@ -2,16 +2,19 @@ import RPi.GPIO as GPIO
 import time
 GPIO.setmode(GPIO.BOARD)
 
-def forward():
+def forward(forwardpin,backwardpin):
 	GPIO.output(forwardpin, 1)              #sets pin to high
 	GPIO.output(backwardpin,0)              #sets pin to low
+	print "forward"
 
-def backward():
+def backward(forwardpin,backwardpin):
 	GPIO.output(forwardpin, 0)              #sets pin to low
 	GPIO.output(backwardpin,1)              #sets pin to high
+	print "backward"
 
-def stop():
+def stop(p):
         p.ChangeDutyCycle(0)                   #0% duty cycle
+	print "stop"
 
 def speedUp(speed):
         p.ChangeDutyCycle(speed)                
@@ -32,10 +35,13 @@ def main():
 	GPIO.setup(forwardpin,GPIO.OUT)
 	GPIO.setup(backwardpin,GPIO.OUT)
 
+	GPIO.output(forwardpin, 1)              #sets pin to high
+        GPIO.output(backwardpin,0)
+
 	p=GPIO.PWM(outpin,frequency)            #configures the pin for pwm output
         p.start(0)
-        p.ChangeDutyCycle(0)                   #starts with 0% duty cycle
-
+        p.ChangeDutyCycle(80)                   #starts with 0% duty cycle
+	print 'i am now here'
 	try:
                 while True:
                         time.sleep(0.02)		# add in continuous keyboard reading here, call appropriate functions
@@ -45,6 +51,5 @@ def main():
                 GPIO.cleanup()
                 print "stopped"
 
-main()
 
 
