@@ -61,7 +61,7 @@ while 1:
 		print "exiting"
 		sys.exit()
 
-	elif (w+a+s+d) == 0:
+	elif (w+s) == 0:
 		p.ChangeDutyCycle(0)
 
 	if x:
