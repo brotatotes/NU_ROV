@@ -15,7 +15,7 @@ outpin = 7                              #PWM output pin is GPIO pin 7
 frequency = 100	                         #frequency is 100 Hz
 
 current_speed = 0 
-current_speed_step = 5                      #keeps track of the current speed(duty cycle) of the RC car
+current_speed_step = 1                     #keeps track of the current speed(duty cycle) of the RC car
 
 GPIO.setup(outpin,GPIO.OUT)             #sets up the pin for GPIO output
 GPIO.setup(forwardpin,GPIO.OUT)
@@ -63,7 +63,6 @@ while 1:
 
 	elif (w+a+s+d) == 0:
 		p.ChangeDutyCycle(0)
-		print "stop"
 
 	if x:
 		if current_speed-current_speed_step >=0:
