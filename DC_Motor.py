@@ -22,6 +22,14 @@ def speedUp(speed):
 def slowDown(speed):
 	p.ChangeDutyCycle(speed)
 
+def turnLeft(leftpin,rightpin):
+	GPIO.output(leftpin,1)
+	GPIO.output(rightpin,0)
+
+def turnRight(leftpin,rightpin):
+	GPIO.output(leftpin,0)
+	GPIO.outpit(rightpin,1)
+
 def main(): 
 	forwardpin = 11                         #11 high is forward
 	backwardpin = 13                        #13 low is forward
