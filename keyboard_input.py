@@ -10,8 +10,9 @@ screen = pygame.display.set_mode(size)
 
 forwardpin = 11                         #11 high is forward
 backwardpin = 13                        #13 low is forward
-leftpin = 16
-rightpin = 18
+leftpin = 12
+rightpin = 15
+highpin = 22
 
 outpin = 7                              #PWM output pin is GPIO pin 7
 frequency = 100	                         #frequency is 100 Hz
@@ -26,16 +27,18 @@ GPIO.setup(forwardpin,GPIO.OUT)
 GPIO.setup(backwardpin,GPIO.OUT)
 GPIO.setup(leftpin,GPIO.OUT)
 GPIO.setup(rightpin,GPIO.OUT)
+GPIO.setup(highpin, GPIO.OUT)
 
+#GPIO.output(highpin,1)
 GPIO.output(forwardpin, 1)              #sets pin to high
 GPIO.output(backwardpin,0)
 GPIO.output(leftpin, 0)              #sets pin to low
 GPIO.output(rightpin,0)		     #sets pin to low
 
+high = GPIO.PWM(highpin,frequency)
+high.start(0)
 p=GPIO.PWM(outpin,frequency)            #configures the pin for pwm output
 p.start(0)
-
-
 
 
 while 1:
@@ -60,19 +63,25 @@ while 1:
 		print "backward"
 	elif a:
 		print "left"
+		high.ChangeDutyCycle(75) #added
 		dc.turnLeft(leftpin,rightpin)
 		pass
 	elif d:
 		print "right"
+		high.ChangeDutyCycle(75) #added
 		dc.turnRight(leftpin,rightpin)
 		pass
 	elif q:
 		p.stop()
+		high.stop()
 		GPIO.cleanup()
 		print "exiting"
 		sys.exit()
-	elif (w+s) == 0:
+	if (w+s) == 0:
 		p.ChangeDutyCycle(0)
+
+	if (a+d) == 0:
+		high.ChangeDutyCycle(0)
 
 	if z and (w or s):
 		current_speed = snail_speed
