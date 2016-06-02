@@ -1,4 +1,4 @@
-import pygame, sys
+import pygame, sys, time
 import DC_Motor as dc
 import RPi.GPIO as GPIO
 pygame.init()
@@ -29,7 +29,6 @@ GPIO.setup(leftpin,GPIO.OUT)
 GPIO.setup(rightpin,GPIO.OUT)
 GPIO.setup(highpin, GPIO.OUT)
 
-#GPIO.output(highpin,1)
 GPIO.output(forwardpin, 1)              #sets pin to high
 GPIO.output(backwardpin,0)
 GPIO.output(leftpin, 0)              #sets pin to low
@@ -53,7 +52,25 @@ while 1:
 	x = state[pygame.K_x]
 	z = state[pygame.K_z]
 	# print "W:" + str(state[pygame.K_w]) + " S:" + str(state[pygame.K_s]) + " A:" + str(state[pygame.K_a]) + " D:" + str(state[pygame.K_d])
-	if w:
+	if (w or s) and (a or d):
+		if w:
+			p.ChangeDutyCycle(current_speed)
+                	dc.forward(forwardpin,backwardpin)
+			print "forward",
+		else:
+			p.ChangeDutyCycle(current_speed)
+                	dc.backward(forwardpin,backwardpin)
+			print "backward",
+		if a:
+			high.ChangeDutyCycle(75) 
+                	dc.turnLeft(leftpin,rightpin)
+			print "+left"
+		else:
+			high.ChangeDutyCycle(75)
+                	dc.turnRight(leftpin,rightpin)
+			print "+right"
+			
+	elif w:
 		p.ChangeDutyCycle(current_speed)
 		dc.forward(forwardpin,backwardpin)
 		print "forward"
@@ -65,12 +82,10 @@ while 1:
 		print "left"
 		high.ChangeDutyCycle(75) #added
 		dc.turnLeft(leftpin,rightpin)
-		pass
 	elif d:
 		print "right"
 		high.ChangeDutyCycle(75) #added
 		dc.turnRight(leftpin,rightpin)
-		pass
 	elif q:
 		p.stop()
 		high.stop()
@@ -93,6 +108,6 @@ while 1:
 		print current_speed
 	if not x and not z:
 		current_speed = base_speed
-
+	time.sleep(0.05)
 
 
